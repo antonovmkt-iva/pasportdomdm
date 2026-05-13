@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#233025" />
+  <title>Дом ДМ — паспорт проекта на сверку</title>
+  <style>
+    :root{
+      --bg:#f6f3ee;
+      --paper:#fffaf2;
+      --white:#fff;
+      --ink:#1f2721;
+      --muted:#667069;
+      --line:rgba(43,54,48,.14);
+      --line-soft:rgba(43,54,48,.08);
+      --green:#1f6f45;
+      --green-2:#e6f3ea;
+      --blue:#1f5f99;
+      --blue-2:#e7f1fb;
+      --amber:#b96b12;
+      --amber-2:#fff0d8;
+      --red:#a53a2a;
+      --red-2:#fde9e4;
+      --violet:#5a43a3;
+      --violet-2:#eee9ff;
+      --gray:#ece8df;
+      --radius:18px;
+      --shadow:0 14px 34px rgba(31,42,31,.08),0 2px 8px rgba(31,42,31,.05);
+      --shadow-soft:0 6px 18px rgba(31,42,31,.06);
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left,rgba(31,111,69,.15),transparent 30rem),
+        radial-gradient(circle at 92% 18%,rgba(185,107,18,.14),transparent 24rem),
+        var(--bg);
+      color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+      line-height:1.45;
+      font-size:15px;
+    }
+    a{color:inherit;text-decoration:none}
+    .progress{position:fixed;z-index:50;top:0;left:0;width:100%;height:3px;background:rgba(31,111,69,.08)}
+    .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--amber));border-radius:999px}
+    .app{width:min(100%,920px);margin:0 auto;padding:calc(14px + var(--safe-top)) 12px calc(36px + var(--safe-bottom))}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#233025,#2d513d 62%,#b96b12 145%);color:#fff;border-radius:28px;padding:22px 16px 16px;box-shadow:var(--shadow)}
+    .hero:before{content:"";position:absolute;right:-5rem;top:-5rem;width:13rem;height:13rem;border-radius:50%;background:rgba(255,255,255,.12)}
+    .hero:after{content:"";position:absolute;left:-5rem;bottom:-7rem;width:15rem;height:15rem;border-radius:50%;background:rgba(255,240,216,.1)}
+    .hero>*{position:relative;z-index:1}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .badge{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.12);color:rgba(255,255,255,.9);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:850;border-radius:999px;padding:5px 9px}
+    h1{font-size:28px;line-height:1.04;margin:0 0 8px;letter-spacing:-.045em;font-weight:900}
+    .hero-sub{font-size:14px;color:rgba(255,255,255,.84);max-width:64ch;margin:0}
+    .hero-note{margin-top:13px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.1);border-radius:18px;padding:12px;color:rgba(255,255,255,.93);font-size:13px}
+    .metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}
+    .metric-top{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:11px 10px;min-height:78px;display:flex;flex-direction:column;justify-content:space-between;backdrop-filter:blur(8px)}
+    .metric-top .label{font-size:11px;color:rgba(255,255,255,.72)}
+    .metric-top .value{font-size:20px;font-weight:900;letter-spacing:-.035em;color:#fff;margin-top:5px}
+    .metric-top .sub{font-size:11px;color:rgba(255,255,255,.72);margin-top:2px}
+    .toolbar{position:sticky;top:3px;z-index:40;margin:10px -12px 0;padding:8px 12px;background:rgba(246,243,238,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line-soft)}
+    .search{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:10px 12px;box-shadow:0 2px 8px rgba(31,42,31,.04)}
+    .search input{appearance:none;border:0;outline:0;background:transparent;font:inherit;width:100%;color:var(--ink)}
+    .search input::placeholder{color:#9ba29d}
+    .nav{display:flex;gap:7px;overflow-x:auto;padding:9px 0 2px;scrollbar-width:none}
+    .nav::-webkit-scrollbar{display:none}
+    .nav a,.chip-btn{flex:0 0 auto;border:1px solid var(--line);background:rgba(255,255,255,.86);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800;color:#3a433e;box-shadow:0 2px 9px rgba(31,42,31,.04)}
+    .actions{display:flex;gap:7px;overflow-x:auto;padding:8px 0 1px;scrollbar-width:none}
+    .actions::-webkit-scrollbar{display:none}
+    .chip-btn{cursor:pointer}
+    .chip-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .section-wrap{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+    section{scroll-margin-top:120px}
+    details.card{background:rgba(255,250,242,.88);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-soft);overflow:hidden}
+    details.card[open]{background:var(--paper)}
+    summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px;min-height:58px}
+    summary::-webkit-details-marker{display:none}
+    .icon{width:36px;height:36px;border-radius:13px;display:grid;place-items:center;flex:0 0 auto;font-size:18px;background:var(--gray)}
+    .sum-text{min-width:0;flex:1}
+    .sum-title{font-size:15px;font-weight:900;letter-spacing:-.018em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sum-sub{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chev{font-size:18px;color:var(--muted);transition:transform .18s ease}
+    details[open] .chev{transform:rotate(180deg)}
+    .body{border-top:1px solid var(--line-soft);padding:14px;display:flex;flex-direction:column;gap:12px;background:rgba(255,255,255,.38)}
+    .block{background:rgba(255,255,255,.74);border:1px solid var(--line-soft);border-radius:16px;padding:13px}
+    .block-title{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.075em;color:var(--muted);margin-bottom:8px}
+    .text p{margin:0 0 10px;color:#26302a;font-size:14px}.text p:last-child{margin-bottom:0}
+    .quote{font-size:16px;font-weight:900;letter-spacing:-.02em;line-height:1.25;margin:2px 0;color:#172019}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .metric{border-radius:15px;padding:11px;background:#fff;border:1px solid var(--line-soft);min-height:72px}
+    .metric .label{font-size:11px;color:var(--muted)}
+    .metric .value{font-size:20px;font-weight:950;letter-spacing:-.035em;margin-top:4px;color:var(--ink)}
+    .metric .sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .tags{display:flex;gap:6px;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:850;line-height:1;background:var(--gray);color:#4d544f}
+    .tag.green{background:var(--green-2);color:var(--green)}.tag.blue{background:var(--blue-2);color:var(--blue)}.tag.amber{background:var(--amber-2);color:var(--amber)}.tag.red{background:var(--red-2);color:var(--red)}.tag.violet{background:var(--violet-2);color:var(--violet)}.tag.dark{background:var(--ink);color:#fff}
+    .callout{border-radius:16px;padding:12px 13px;border-left:4px solid var(--green);background:var(--green-2);color:#17462d;font-size:13px}
+    .callout b{font-weight:950}.callout.blue{border-left-color:var(--blue);background:var(--blue-2);color:#1e4e7a}.callout.amber{border-left-color:var(--amber);background:var(--amber-2);color:#68410e}.callout.red{border-left-color:var(--red);background:var(--red-2);color:#713024}.callout.violet{border-left-color:var(--violet);background:var(--violet-2);color:#40317c}
+    .list{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;list-style:none}
+    .list li{position:relative;padding-left:20px;font-size:13.5px;color:#26302a}.list li:before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--green)}
+    .list.blue li:before{background:var(--blue)}.list.amber li:before{background:var(--amber)}.list.red li:before{background:var(--red)}.list.violet li:before{background:var(--violet)}
+    .row{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+    .row:last-child{border-bottom:0}.key{font-size:12px;color:var(--muted);font-weight:800}.val{font-size:13.2px;color:#25312a}.val b{font-weight:900}
+    .split{display:grid;grid-template-columns:1fr;gap:10px}.mini-card{background:#fff;border:1px solid var(--line-soft);border-radius:15px;padding:11px}.mini-card h4{margin:0 0 6px;font-size:13.2px}.mini-card p{margin:0;color:#445049;font-size:12.7px}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:15px;background:#fff}
+    table{width:100%;border-collapse:collapse;font-size:12.8px}th{background:#f4f1ea;color:var(--muted);text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:10px;white-space:nowrap}td{padding:10px;border-top:1px solid var(--line-soft);vertical-align:top;color:#26302a}td:first-child{font-weight:850;color:var(--ink)}
+    .checklist{display:flex;flex-direction:column;gap:8px}.check{display:grid;grid-template-columns:28px 1fr;gap:9px;align-items:flex-start;background:#fff;border:1px solid var(--line-soft);border-radius:14px;padding:10px}.box{width:22px;height:22px;border-radius:7px;border:2px solid rgba(31,39,33,.25);background:#fff}.check-text{font-size:13.2px;color:#26302a}.check-text b{font-weight:900}.small{font-size:12px;color:var(--muted);line-height:1.45}
+    .footer{padding:18px 4px 4px;color:var(--muted);font-size:11px;text-align:center}.hidden{display:none!important}mark{background:rgba(255,215,132,.75);border-radius:4px;padding:0 2px}
+    @media(min-width:720px){.app{padding-left:18px;padding-right:18px}.hero{padding:30px}.metrics{grid-template-columns:repeat(4,1fr)}h1{font-size:40px}.grid{grid-template-columns:repeat(4,1fr)}.split{grid-template-columns:1fr 1fr}.row{grid-template-columns:160px 1fr}.section-wrap{gap:16px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev{transition:none}}
+    @media print{.toolbar,.progress,.chip-btn{display:none}.app{max-width:none}.hero,details.card{box-shadow:none}details.card{break-inside:avoid}details.card:not([open]) .body{display:block}}
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+  <main class="app">
+    <header class="hero" id="top">
+      <div class="badges">
+        <span class="badge">Рабочая версия</span>
+        <span class="badge">На сверку фактов</span>
+        <span class="badge">Дом ДМ</span>
+      </div>
+      <h1>Паспорт проекта<br>«Дом ДМ»</h1>
+      <p class="hero-sub">Документ для проверки базовых вводных перед упаковкой сайта, соцсетей, Авито, карт и рекламы. Это не финальный текст для публикации.</p>
+      <div class="hero-note"><b>Что нужно сделать:</b> пройти по разделам, отметить ошибки, уточнить спорные места и прислать недостающие данные. Правки можно отправлять в любом удобном формате — сообщением, файлом, фото или голосовым.</div>
+      <div class="metrics">
+        <div class="metric-top"><div class="label">главный фокус</div><div class="value">Фаустово</div><div class="sub">участок + дом</div></div>
+        <div class="metric-top"><div class="label">участков</div><div class="value">18</div><div class="sub">нужна таблица</div></div>
+        <div class="metric-top"><div class="label">средний чек</div><div class="value">7–8 млн ₽</div><div class="sub">участок + дом</div></div>
+        <div class="metric-top"><div class="label">цель</div><div class="value">35 млн ₽</div><div class="sub">выручка</div></div>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <label class="search" for="searchInput">🔎<input id="searchInput" type="search" placeholder="Поиск: Фаустово, ипотека, комплектация, Вика..." /></label>
+      <nav class="nav" aria-label="Навигация">
+        <a href="#purpose">Цель</a><a href="#company">Компания</a><a href="#product">Продукт</a><a href="#faustovo">Фаустово</a><a href="#locations">Локации</a><a href="#houses">Дома</a><a href="#mortgage">Ипотека</a><a href="#audience">Покупатели</a><a href="#content">Контент</a><a href="#checklist">Проверить</a>
+      </nav>
+      <div class="actions">
+        <button class="chip-btn active" data-filter="all">Всё</button>
+        <button class="chip-btn" data-filter="check">Проверить</button>
+        <button class="chip-btn" data-filter="facts">Факты</button>
+        <button class="chip-btn" data-filter="marketing">Маркетинг</button>
+      </div>
+    </div>
+
+    <div class="section-wrap" id="cards">
+
+      <section id="purpose">
+        <details class="card" open data-tags="check facts marketing">
+          <summary><span class="icon" style="background:var(--blue-2)">📌</span><span class="sum-text"><span class="sum-title">1. Цель документа</span><span class="sum-sub">что проверяем и зачем</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="block text">
+              <div class="block-title">Зачем этот файл</div>
+              <p>Мы собрали рабочее понимание проекта «Дом ДМ»: продукт, локации, дома, ипотеку, покупателей, каналы и материалы для упаковки.</p>
+              <p>Документ нужен, чтобы до запуска дизайна, сайта, рекламы и соцсетей не уехать в неверные факты.</p>
+            </div>
+            <div class="callout blue"><b>Это не публичная презентация и не финальный рекламный текст.</b> Это версия на проверку: где ошибка — исправить, где данных не хватает — дослать.</div>
+            <div class="block">
+              <div class="block-title">Что особенно важно проверить</div>
+              <ul class="list blue">
+                <li>Фаустово: участки, площади, цены, статусы, коммуникации, благоустройство.</li>
+                <li>Комплектация дома «под ключ»: что входит и что не входит.</li>
+                <li>Ипотека: банки, программы, допустимые формулировки.</li>
+                <li>Локации: что продаём сейчас, а что показываем вторым слоем.</li>
+                <li>Материалы: что можно снимать, показывать и использовать в рекламе.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="company">
+        <details class="card" open data-tags="facts marketing">
+          <summary><span class="icon" style="background:var(--green-2)">🏡</span><span class="sum-text"><span class="sum-title">2. Кто такие Дом ДМ</span><span class="sum-sub">рабочее описание компании</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="block text">
+              <div class="block-title">Рабочая формулировка</div>
+              <p class="quote">Дом ДМ — местная компания из Воскресенска, которая продаёт участки ИЖС и строит на них дома под ключ для постоянного проживания.</p>
+              <p>Для покупателя важно показать не просто «землю» и не просто «стройку», а понятный путь: выбрать участок, подобрать дом, оформить ипотеку, построиться и переехать.</p>
+            </div>
+            <div class="grid">
+              <div class="metric"><div class="label">формат</div><div class="value">компания</div><div class="sub">без лишних ярлыков</div></div>
+              <div class="metric"><div class="label">юридически</div><div class="value">ИП</div><div class="sub">в тексте — Дом ДМ</div></div>
+              <div class="metric"><div class="label">образ</div><div class="value" style="font-size:17px">местные</div><div class="sub">надёжно и понятно</div></div>
+            </div>
+            <div class="block">
+              <div class="block-title">Что есть у компании</div>
+              <div class="tags"><span class="tag green">земля</span><span class="tag blue">бригады</span><span class="tag amber">проекты</span><span class="tag violet">техника</span><span class="tag dark">отдел продаж</span><span class="tag green">ипотечное сопровождение</span></div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="product">
+        <details class="card" open data-tags="facts marketing">
+          <summary><span class="icon" style="background:var(--amber-2)">🧱</span><span class="sum-text"><span class="sum-title">3. Главный продукт</span><span class="sum-sub">участок ИЖС + дом под ключ</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="grid">
+              <div class="metric"><div class="label">главный продукт</div><div class="value">участок + дом</div><div class="sub">Фаустово</div></div>
+              <div class="metric"><div class="label">чек</div><div class="value">7–8 млн ₽</div><div class="sub">ориентир</div></div>
+              <div class="metric"><div class="label">типовые дома</div><div class="value">80 / 100 м²</div><div class="sub">можно адаптировать</div></div>
+              <div class="metric"><div class="label">фокус стройки</div><div class="value">каркас</div><div class="sub">основной формат</div></div>
+            </div>
+            <div class="block">
+              <div class="block-title">Приоритет продуктов</div>
+              <div class="row"><div class="key">Основной</div><div class="val"><b>Участок ИЖС + дом под ключ</b> на участке Дом ДМ.</div></div>
+              <div class="row"><div class="key">Запасной</div><div class="val">Продажа участка отдельно, если клиент хочет купить землю без стройки.</div></div>
+              <div class="row"><div class="key">По запросу</div><div class="val">Строительство на участке клиента. Услуга возможна, но не основной рекламный фокус.</div></div>
+            </div>
+            <div class="callout green"><b>Главная логика:</b> продавать не «сотки», а понятный путь к своему дому: место, проект, стройка, ипотека, сопровождение, переезд.</div>
+            <div class="callout amber"><b>Проверить:</b> актуальные цены «от» для участка + дома 80 м² и 100 м², а также минимальную/максимальную стоимость участка отдельно.</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="faustovo">
+        <details class="card" open data-tags="facts check marketing">
+          <summary><span class="icon" style="background:var(--green-2)">📍</span><span class="sum-text"><span class="sum-title">4. Фаустово — приоритет №1</span><span class="sum-sub">18 участков, популярная локация, нужен генплан</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="block" style="background:var(--green-2);border-color:rgba(31,111,69,.18)">
+              <div class="tags"><span class="tag dark">Фаустово</span><span class="tag green">приоритет №1</span><span class="tag blue">участок + дом</span><span class="tag amber">18 участков</span></div>
+              <p class="quote" style="margin-top:10px">Фаустово — главный проект для упаковки, рекламы и продаж на старте.</p>
+            </div>
+            <div class="grid">
+              <div class="metric"><div class="label">участков</div><div class="value">18</div><div class="sub">подтвердить таблицей</div></div>
+              <div class="metric"><div class="label">локация</div><div class="value" style="font-size:17px">популярная</div><div class="sub">особенно у местных</div></div>
+              <div class="metric"><div class="label">до станции</div><div class="value">≈20 мин</div><div class="sub">пешком</div></div>
+              <div class="metric"><div class="label">газ</div><div class="value">нет</div><div class="sub">не обещаем</div></div>
+            </div>
+            <div class="split">
+              <div class="block"><div class="block-title">Преимущества для покупателя</div><ul class="list green"><li>Популярное место для местных жителей.</li><li>Рядом инфраструктура пгт Белоозёрский.</li><li>По пути к станции есть магазины.</li><li>Формат подходит для постоянного проживания.</li><li>Можно выбрать участок и построить дом под ключ.</li></ul></div>
+              <div class="block"><div class="block-title">Благоустройство</div><ul class="list blue"><li>Планируется асфальт.</li><li>Чистка пруда.</li><li>Освещение.</li><li>Дренаж.</li><li>Возможно детская площадка или зона отдыха.</li></ul></div>
+            </div>
+            <div class="callout amber"><b>По выписке ЕГРН:</b> есть участок в Фаустово, ул. Новая, участок №91, кадастровый номер 50:29:0030301:119, площадь 7000 м², категория — земли населённых пунктов, ВРИ — ИЖС. Нужно подтвердить, как этот участок связан с текущими 18 участками.</div>
+            <div class="block"><div class="block-title">Что нужно дослать по Фаустово</div><ul class="list red"><li>Таблицу 18 участков: номер, площадь, цена, статус, кадастровый номер.</li><li>Генплан/схему, которую можно использовать в работе.</li><li>Сроки по асфальту, освещению, дренажу и пруду.</li><li>Понятную формулировку по коммуникациям.</li></ul></div>
+          </div>
+        </details>
+      </section>
+
+      <section id="locations">
+        <details class="card" open data-tags="facts check marketing">
+          <summary><span class="icon" style="background:var(--violet-2)">🗺️</span><span class="sum-text"><span class="sum-title">5. Другие локации</span><span class="sum-sub">Фетровая фабрика, Демидово, Лопатинский</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="split">
+              <div class="mini-card"><h4>Фетровая фабрика</h4><p>Важная локация для доверия и контента. Есть 2 готовых дома, которые можно использовать для фото, видео, отзывов и показов клиентам.</p></div>
+              <div class="mini-card"><h4>Демидово</h4><p>Второстепенная локация. По вводным фигурирует кадастровый номер 50:29:0020212:1812. Нужно уточнить статус и что именно продаётся.</p></div>
+              <div class="mini-card"><h4>Лопатинский</h4><p>Оставляем как дополнительную локацию, но требуется уточнить текущий статус, продукт и приоритет.</p></div>
+              <div class="mini-card"><h4>Фаустово</h4><p>Не смешивать с другими локациями в одном оффере. Для рекламы и сайта Фаустово должно быть отдельным понятным продуктом.</p></div>
+            </div>
+            <div class="callout amber"><b>Проверить:</b> какие локации реально показываем покупателям сейчас, какие оставляем вторым слоем, а какие временно не трогаем в рекламе.</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="houses">
+        <details class="card" open data-tags="facts check marketing">
+          <summary><span class="icon" style="background:var(--amber-2)">🏗️</span><span class="sum-text"><span class="sum-title">6. Дома и комплектация</span><span class="sum-sub">каркас, под ключ, можно заезжать</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="grid">
+              <div class="metric"><div class="label">стены</div><div class="value">150 мм</div><div class="sub">каркас</div></div>
+              <div class="metric"><div class="label">пол/потолок</div><div class="value">200 мм</div><div class="sub">утепление</div></div>
+              <div class="metric"><div class="label">фундамент</div><div class="value" style="font-size:17px">бетонные сваи</div><div class="sub">уточнить варианты</div></div>
+              <div class="metric"><div class="label">срок</div><div class="value">≈40 дней</div><div class="sub">с выхода бригады</div></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <tr><th>Блок</th><th>Что указано сейчас</th><th>Что проверить</th></tr>
+                <tr><td>Конструктив</td><td>Каркасный дом, сборка на участке, утеплитель минвата.</td><td>Формулировку технологии для сайта.</td></tr>
+                <tr><td>Кровля / окна / фасад</td><td>Металлочерепица, пластиковые окна, фасад Hauberk.</td><td>Точные названия материалов/производителей, если важно.</td></tr>
+                <tr><td>Отделка</td><td>Жилая, можно заезжать. Пол — ламинат и кварцвинил, стены — имитация бруса, потолок — натяжной.</td><td>Какие варианты отделки есть на выбор.</td></tr>
+                <tr><td>Инженерка</td><td>Электрика, отопление, вода, канализация, бойлер/котёл, ванна, унитаз.</td><td>Точный список по комплектации.</td></tr>
+                <tr><td>Не входит</td><td>Люстры.</td><td>Есть ли ещё исключения.</td></tr>
+                <tr><td>Гарантия</td><td>2 года по закону.</td><td>Как правильно формулировать гарантию.</td></tr>
+              </table>
+            </div>
+            <div class="callout blue"><b>Публичная формулировка по срокам:</b> лучше писать не «дом за 40 дней» как жёсткое обещание, а «строительство в среднем от 40 дней после выхода бригады на участок; срок зависит от проекта и условий».</div>
+            <div class="callout amber"><b>Кастомизация:</b> планировку, материалы и отделку можно адаптировать под клиента. Важно сразу говорить, что изменения могут влиять на цену и срок.</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="mortgage">
+        <details class="card" open data-tags="facts check marketing">
+          <summary><span class="icon" style="background:var(--blue-2)">🏦</span><span class="sum-text"><span class="sum-title">7. Ипотека и оплата</span><span class="sum-sub">Сбер, семейная, IT, обычная, маткапитал</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="grid">
+              <div class="metric"><div class="label">банк</div><div class="value">Сбер</div><div class="sub">подтверждено</div></div>
+              <div class="metric"><div class="label">программы</div><div class="value">3</div><div class="sub">семейная / IT / обычная</div></div>
+              <div class="metric"><div class="label">платёж</div><div class="value">45–60 тыс.</div><div class="sub">ориентир/мес</div></div>
+              <div class="metric"><div class="label">маткапитал</div><div class="value">можно</div><div class="sub">как первый взнос</div></div>
+            </div>
+            <div class="block">
+              <div class="block-title">Как работает сейчас</div>
+              <ul class="list blue">
+                <li>Виктория помогает с ипотечным сопровождением.</li>
+                <li>Точный расчёт делают после просмотра и согласия на покупку.</li>
+                <li>Подходят клиенты, которые проходят требования банка.</li>
+                <li>Кредитную историю не исправляем — при сложных случаях честно разбираем ситуацию.</li>
+              </ul>
+            </div>
+            <div class="callout green"><b>Безопасная публичная формулировка:</b> «Поможем подобрать ипотечное решение под вашу ситуацию и предварительно сориентируем по ежемесячному платежу».</div>
+            <div class="callout amber"><b>Проверить отдельно:</b> какие формулировки по первоначальному взносу допустимы в рекламе, на сайте и в личной консультации. В публичной рекламе не делаем это главным обещанием.</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="audience">
+        <details class="card" open data-tags="facts marketing">
+          <summary><span class="icon" style="background:var(--green-2)">👨‍👩‍👧‍👦</span><span class="sum-text"><span class="sum-title">8. Покупатели и их вопросы</span><span class="sum-sub">семьи, местные и возвращающиеся</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="split">
+              <div class="block"><div class="block-title">Кто покупает</div><ul class="list"><li>Семьи с детьми — основное ядро.</li><li>Местные из Воскресенска и Белоозёрского.</li><li>Приезжие из Москвы/области, часто бывшие местные или люди с дачами/родными в районе.</li><li>Решение чаще принимают вместе, иногда подключаются родители.</li></ul></div>
+              <div class="block"><div class="block-title">Зачем покупают</div><ul class="list blue"><li>Переехать из съёмной квартиры.</li><li>Купить первый дом.</li><li>Улучшить условия жизни.</li><li>Жить ближе к природе, но не терять инфраструктуру.</li></ul></div>
+            </div>
+            <div class="split">
+              <div class="block"><div class="block-title">Что важно</div><ul class="list green"><li>Цена и доступный вход в покупку.</li><li>Льготная ипотека и понятный платёж.</li><li>Близость к станции, школе/саду и магазинам.</li><li>Качество строительства.</li><li>Скорость стройки.</li><li>Юридическая чистота.</li></ul></div>
+              <div class="block"><div class="block-title">Чего боятся</div><ul class="list red"><li>Что обманут.</li><li>Что стройка затянется.</li><li>Что ипотеку не дадут.</li><li>Что итог окажется дороже.</li><li>Что дом построят некачественно.</li></ul></div>
+            </div>
+            <div class="callout blue"><b>Главный месседж:</b> «Свой дом для семьи в понятном месте, с сопровождением, ипотекой и прозрачной стройкой».</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="content">
+        <details class="card" open data-tags="marketing facts check">
+          <summary><span class="icon" style="background:var(--red-2)">🎬</span><span class="sum-text"><span class="sum-title">9. Контент, соцсети и реклама</span><span class="sum-sub">что показываем на старте</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="split">
+              <div class="block"><div class="block-title">Соцсети</div><div class="tags"><span class="tag blue">VK</span><span class="tag green">Telegram</span><span class="tag violet">Instagram</span><span class="tag red">YouTube Shorts</span><span class="tag amber">MAX</span></div><p class="small" style="margin-top:8px">Все площадки заводятся с нуля. Контент лучше делать одной системой: вертикальное видео для всех коротких форматов, посты для VK/TG.</p></div>
+              <div class="block"><div class="block-title">Лица и объекты</div><ul class="list"><li>Виктория — ипотека, участки, сделки, показы.</li><li>Рабочие — процесс стройки.</li><li>Аркадий — возможно, если будет готов.</li><li>Объекты: Фетровая фабрика, готовые дома, стройка, участки.</li></ul></div>
+            </div>
+            <div class="split">
+              <div class="block"><div class="block-title">Доказательства</div><ul class="list green"><li>2 готовых дома для съёмки.</li><li>2 дома на Фетровой фабрике для фото, видео, отзывов и показов.</li><li>Отзывы клиентов в согласованном формате.</li><li>Этапы стройки: фундамент, каркас, утепление, кровля, отделка.</li><li>Документы можно показывать, но публично — с закрытыми персональными данными.</li></ul></div>
+              <div class="block"><div class="block-title">Реклама на старт</div><ul class="list blue"><li>Авито-продвижение.</li><li>VK.</li><li>Городские паблики.</li><li>География: Воскресенск, Белоозёрский, Раменское, Коломна, радиус вокруг Фаустово.</li><li>Вести в мессенджеры Виктории, звонок, VK-сообщения, Авито.</li></ul></div>
+            </div>
+            <div class="callout red"><b>Ограничения по тону:</b> не токсично, не пошло, конкурентов не критикуем. Не обещаем «100% одобрение», «строго 40 дней», «без доплат» и другие жёсткие гарантии.</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="checklist">
+        <details class="card" open data-tags="check facts marketing">
+          <summary><span class="icon" style="background:var(--amber-2)">✅</span><span class="sum-text"><span class="sum-title">10. Что проверить и дослать</span><span class="sum-sub">финальный чек-лист для Вики и Михаила</span></span><span class="chev">⌄</span></summary>
+          <div class="body">
+            <div class="checklist">
+              <div class="check"><div class="box"></div><div class="check-text"><b>Фаустово:</b> таблица 18 участков — номер, площадь, цена, статус, кадастровый номер.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Генплан:</b> схема Фаустово, которую можно использовать в работе и позже адаптировать для сайта/Авито.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Коммуникации:</b> точная формулировка — что уже есть рядом, что подключается, что входит в стоимость, что оплачивается отдельно.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Благоустройство:</b> сроки по асфальту, освещению, дренажу, пруду, зоне отдыха/детской площадке.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Дома:</b> финальная комплектация «под ключ» — входит/не входит по каждому блоку.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Цены:</b> актуальная цена «участок + дом» для 80 м² и 100 м², цена участка отдельно, условия изменения цены при кастомизации.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Ипотека:</b> банки, программы, маткапитал, допустимые публичные формулировки по платежу и первому взносу.</div></div>
+              <div class="check"><div class="box"></div><div class="check-text"><b>Контент:</b> список готовых домов, клиентов для отзывов, объектов для съёмки, что можно показывать публично.</div></div>
+            </div>
+            <div class="callout green"><b>Как присылать правки:</b> в любом удобном формате: сообщением, файлом, фото, таблицей или хоть голосовым. Можно коротко по разделам: «раздел 4 — поправить…», «раздел 6 — добавить…». Если есть что дополнить сверху — будет супер.</div>
+          </div>
+        </details>
+      </section>
+
+    </div>
+
+    <footer class="footer">
+      Дом ДМ · Паспорт проекта на сверку фактов · Версия от 09.05.2026<br />
+      Документ подготовлен для Виктории и Михаила. Не является финальным рекламным текстом или юридическим заключением.
+    </footer>
+  </main>
+
+  <script>
+    const progress = document.getElementById('progress');
+    const searchInput = document.getElementById('searchInput');
+    const cards = Array.from(document.querySelectorAll('details.card'));
+    const buttons = Array.from(document.querySelectorAll('.chip-btn'));
+    let activeFilter = 'all';
+
+    function updateProgress(){
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+      progress.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', updateProgress, {passive:true});
+    updateProgress();
+
+    function normalize(str){return (str || '').toLowerCase().replace(/ё/g,'е')}
+    function stripMarks(){
+      document.querySelectorAll('mark').forEach(mark => {
+        const text = document.createTextNode(mark.textContent);
+        mark.replaceWith(text);
+      });
+    }
+    function highlight(card, q){
+      if(!q) return;
+      const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, {
+        acceptNode(node){
+          if(!node.nodeValue || !normalize(node.nodeValue).includes(q)) return NodeFilter.FILTER_REJECT;
+          if(node.parentElement && ['SCRIPT','STYLE','MARK'].includes(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes=[];
+      while(walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.slice(0,12).forEach(node=>{
+        const text=node.nodeValue;
+        const idx=normalize(text).indexOf(q);
+        if(idx<0) return;
+        const before=text.slice(0,idx);
+        const mid=text.slice(idx,idx+q.length);
+        const after=text.slice(idx+q.length);
+        const mark=document.createElement('mark'); mark.textContent=mid;
+        const frag=document.createDocumentFragment();
+        if(before) frag.appendChild(document.createTextNode(before));
+        frag.appendChild(mark);
+        if(after) frag.appendChild(document.createTextNode(after));
+        node.replaceWith(frag);
+      });
+    }
+    function applyFilters(){
+      stripMarks();
+      const q = normalize(searchInput.value.trim());
+      cards.forEach(card => {
+        const tags = card.dataset.tags || '';
+        const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter);
+        const matchesSearch = !q || normalize(card.innerText).includes(q);
+        const show = matchesFilter && matchesSearch;
+        card.classList.toggle('hidden', !show);
+        if(show && q){card.open = true; highlight(card, q)}
+      });
+    }
+    searchInput.addEventListener('input', applyFilters);
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      buttons.forEach(b => b.classList.toggle('active', b === btn));
+      applyFilters();
+    }));
+  </script>
+</body>
+</html>
